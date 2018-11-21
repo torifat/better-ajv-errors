@@ -1,10 +1,15 @@
+import { unescapeJsonPointer } from 'ajv/lib/compile/util';
+
 export default function getMetaFromPath(
   jsonAst,
   dataPath,
   isIdentifierLocation
 ) {
   // TODO: Handle json pointer escape notation and better error handling
-  const pointers = dataPath.split('/').slice(1);
+  const pointers = dataPath
+    .split('/')
+    .slice(1)
+    .map(unescapeJsonPointer);
   const lastPointerIndex = pointers.length - 1;
   return pointers.reduce((obj, pointer, idx) => {
     switch (obj.type) {
