@@ -1,16 +1,23 @@
 import chalk from 'chalk';
 import leven from 'leven';
 import pointer from 'jsonpointer';
-import BaseValidationError from './base';
+import BaseValidationError, { ErrorOutput } from './base';
+import { EnumError } from '../types';
 
 export default class EnumValidationError extends BaseValidationError {
+  error: EnumError;
+
+  constructor(error: EnumError, options) {
+    super(error, options);
+  }
+
   print() {
     const {
       message,
       params: { allowedValues },
-    } = this.options;
-    const bestMatch = this.findBestMatch();
+    } = this.error;
 
+    const bestMatch = this.findBestMatch();
     const output = [
       chalk`{red {bold ENUM} ${message}}`,
       chalk`{red (${allowedValues.join(', ')})}\n`,
@@ -26,10 +33,10 @@ export default class EnumValidationError extends BaseValidationError {
   }
 
   getError() {
-    const { message, dataPath, params } = this.options;
+    const { message, dataPath, params } = this.error;
     const bestMatch = this.findBestMatch();
 
-    const output = {
+    const output: ErrorOutput = {
       ...this.getLocation(),
       error: `${this.getDecoratedPath(
         dataPath
@@ -48,7 +55,7 @@ export default class EnumValidationError extends BaseValidationError {
     const {
       dataPath,
       params: { allowedValues },
-    } = this.options;
+    } = this.error;
     const currentValue = pointer.get(this.data, dataPath);
 
     if (!currentValue) {

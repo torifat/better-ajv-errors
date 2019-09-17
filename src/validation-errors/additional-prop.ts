@@ -1,14 +1,17 @@
 import chalk from 'chalk';
 import BaseValidationError from './base';
+import { AdditionalPropError, Error } from '../types';
 
 export default class AdditionalPropValidationError extends BaseValidationError {
-  constructor(...args) {
-    super(...args);
-    this.options.isIdentifierLocation = true;
+  error: AdditionalPropError;
+
+  constructor(error: Error, options) {
+    super(error, options);
+    this.error.isIdentifierLocation = true;
   }
 
   print() {
-    const { message, dataPath, params } = this.options;
+    const { message, dataPath, params } = this.error;
     const output = [chalk`{red {bold ADDTIONAL PROPERTY} ${message}}\n`];
 
     return output.concat(
@@ -20,7 +23,7 @@ export default class AdditionalPropValidationError extends BaseValidationError {
   }
 
   getError() {
-    const { params, dataPath } = this.options;
+    const { params, dataPath } = this.error;
 
     return {
       ...this.getLocation(`${dataPath}/${params.additionalProperty}`),

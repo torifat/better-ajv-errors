@@ -12,7 +12,8 @@
             "corejs": 3,
             "loose": true
           }
-        ]
+        ],
+        "@babel/preset-typescript"
       ],
       "plugins": ["@babel/syntax-object-rest-spread", "add-module-exports"],
       "ignore": ["**/__tests__", "**/__fixtures__", "node_modules"]
@@ -29,7 +30,8 @@
             "corejs": 3,
             "loose": true
           }
-        ]
+        ],
+        "@babel/preset-typescript"
       ],
       "plugins": [
         "@babel/syntax-object-rest-spread",
@@ -47,7 +49,8 @@
               "node": "current"
             }
           }
-        ]
+        ],
+        "@babel/preset-typescript"
       ],
       "plugins": ["@babel/syntax-object-rest-spread"]
     }

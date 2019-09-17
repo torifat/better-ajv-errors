@@ -27,9 +27,7 @@ describe('createErrorInstances', () => {
       Array [
         EnumValidationError {
           "data": undefined,
-          "jsonAst": undefined,
-          "jsonRaw": undefined,
-          "options": Object {
+          "error": Object {
             "keyword": "enum",
             "params": Object {
               "allowedValues": Array [
@@ -40,6 +38,8 @@ describe('createErrorInstances', () => {
               ],
             },
           },
+          "jsonAst": undefined,
+          "jsonRaw": undefined,
           "schema": undefined,
         },
       ]

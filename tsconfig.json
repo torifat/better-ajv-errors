@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "downlevelIteration": true,
+    "declarationDir": "lib/types",
+    "esModuleInterop": true,
+    "declaration": true
+  }
+}

@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
 import betterAjvErrors from '../../';
-import { getSchemaAndData } from '../../test-helpers';
+import { getSchemaAndData } from './helpers';
 
 describe('Main', () => {
   it('should support js output format for default errors', async () => {

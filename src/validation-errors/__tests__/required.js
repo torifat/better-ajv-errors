@@ -1,6 +1,6 @@
 import parse from 'json-to-ast';
-import { getSchemaAndData } from '../../test-helpers';
 import RequiredValidationError from '../required';
+import { getSchemaAndData } from './helpers';
 
 describe('Required', () => {
   it('prints correctly for missing required prop', async () => {

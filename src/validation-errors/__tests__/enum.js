@@ -1,6 +1,6 @@
 import parse from 'json-to-ast';
-import { getSchemaAndData } from '../../test-helpers';
 import EnumValidationError from '../enum';
+import { getSchemaAndData } from './helpers';
 
 describe('Enum', () => {
   let schema, data, jsonRaw, jsonAst;

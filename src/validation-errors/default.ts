@@ -3,7 +3,7 @@ import BaseValidationError from './base';
 
 export default class DefaultValidationError extends BaseValidationError {
   print() {
-    const { keyword, message } = this.options;
+    const { keyword, message } = this.error;
     const output = [chalk`{red {bold ${keyword.toUpperCase()}} ${message}}\n`];
 
     return output.concat(
@@ -12,7 +12,7 @@ export default class DefaultValidationError extends BaseValidationError {
   }
 
   getError() {
-    const { keyword, message, dataPath } = this.options;
+    const { keyword, message, dataPath } = this.error;
 
     return {
       ...this.getLocation(),

@@ -1,14 +1,17 @@
 import chalk from 'chalk';
 import BaseValidationError from './base';
+import { RequiredError } from '../types';
 
 export default class RequiredValidationError extends BaseValidationError {
-  getLocation(dataPath = this.options.dataPath) {
+  error: RequiredError;
+
+  getLocation(dataPath = this.error.dataPath) {
     const { start } = super.getLocation(dataPath);
     return { start };
   }
 
   print() {
-    const { message, params } = this.options;
+    const { message, params } = this.error;
     const output = [chalk`{red {bold REQUIRED} ${message}}\n`];
 
     return output.concat(
@@ -19,7 +22,7 @@ export default class RequiredValidationError extends BaseValidationError {
   }
 
   getError() {
-    const { message, dataPath } = this.options;
+    const { message, dataPath } = this.error;
 
     return {
       ...this.getLocation(),

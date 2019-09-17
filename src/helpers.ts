@@ -1,3 +1,4 @@
+import { Error, Node, Options } from './types';
 import {
   getChildren,
   getErrors,
@@ -7,6 +8,7 @@ import {
   isRequiredError,
   concatAll,
   notUndefined,
+  areEnumErrors,
 } from './utils';
 import {
   AdditionalPropValidationError,
@@ -18,7 +20,7 @@ import {
 const JSON_POINTERS_REGEX = /\/[\w_-]+(\/\d+)?/g;
 
 // Make a tree of errors from ajv errors array
-export function makeTree(ajvErrors = []) {
+export function makeTree(ajvErrors: Array<Error> = []) {
   const root = { children: {} };
   ajvErrors.forEach(ajvError => {
     const { dataPath } = ajvError;
@@ -37,7 +39,7 @@ export function makeTree(ajvErrors = []) {
   return root;
 }
 
-export function filterRedundantErrors(root, parent, key) {
+export function filterRedundantErrors(root: Node, parent?: Node, key?: string) {
   /**
    * If there is a `required` error then we can just skip everythig else.
    * And, also `required` should have more priority than `anyOf`. @see #8
@@ -70,7 +72,13 @@ export function filterRedundantErrors(root, parent, key) {
    * Need explicit `root.errors` check because `[].every(fn) === true`
    * https://en.wikipedia.org/wiki/Vacuous_truth#Vacuous_truths_in_mathematics
    */
-  if (root.errors && root.errors.length && getErrors(root).every(isEnumError)) {
+  if (
+    key &&
+    parent &&
+    root.errors &&
+    root.errors.length &&
+    getErrors(root).every(isEnumError)
+  ) {
     if (
       getSiblings(parent)(root)
         // Remove any reference which becomes `undefined` later
@@ -86,11 +94,11 @@ export function filterRedundantErrors(root, parent, key) {
   );
 }
 
-export function createErrorInstances(root, options) {
+export function createErrorInstances(root: Node, options: Options) {
   const errors = getErrors(root);
-  if (errors.length && errors.every(isEnumError)) {
+  if (areEnumErrors(errors)) {
     const uniqueValues = new Set(
-      concatAll([])(errors.map(e => e.params.allowedValues))
+      concatAll<string>([])(errors.map(e => e.params.allowedValues))
     );
     const allowedValues = [...uniqueValues];
     const error = errors[0];
