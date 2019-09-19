@@ -1,19 +1,14 @@
-import { codeFrameColumns } from '@babel/code-frame';
-import { getMetaFromPath, getDecoratedDataPath } from '../json';
+import { codeFrameColumns, SourceLocation } from '@babel/code-frame';
+import { getMetaFromPath } from '../json';
 import { Error, Options } from '../types';
 
-interface Location {
-  start: number;
-  end?: number;
-}
-
-export interface ErrorOutput extends Location {
+export interface ErrorOutput extends SourceLocation {
   error: string;
   path: string;
   suggestion?: string;
 }
 
-export default class BaseValidationError {
+export default class ValidationError {
   protected error: Error;
   protected data: Options['data'];
   protected schema: Options['schema'];
@@ -28,25 +23,25 @@ export default class BaseValidationError {
     this.jsonRaw = jsonRaw;
   }
 
-  getLocation(dataPath = this.error.dataPath): Location {
+  getLocation(dataPath = this.error.dataPath): SourceLocation {
     const { isIdentifierLocation, shouldSkipEndLocation } = this.error;
     const { loc } = getMetaFromPath(
       this.jsonAst,
       dataPath,
       isIdentifierLocation
     );
+
+    if (!loc) {
+      throw new Error(`Location not found for path: ${dataPath}`);
+    }
+
     return {
       start: loc.start,
       end: shouldSkipEndLocation ? undefined : loc.end,
     };
   }
 
-  getDecoratedPath(dataPath = this.error.dataPath) {
-    const decoratedPath = getDecoratedDataPath(this.jsonAst, dataPath);
-    return decoratedPath;
-  }
-
-  getCodeFrame(message, dataPath = this.error.dataPath) {
+  getCodeFrame(message: string, dataPath = this.error.dataPath) {
     return codeFrameColumns(this.jsonRaw, this.getLocation(dataPath), {
       highlightCode: true,
       message,

@@ -13,15 +13,16 @@ import {
 import {
   AdditionalPropValidationError,
   RequiredValidationError,
-  EnumValidationError,
   DefaultValidationError,
+  EnumValidationError,
+  BaseValidationError,
 } from './validation-errors';
 
 const JSON_POINTERS_REGEX = /\/[\w_-]+(\/\d+)?/g;
 
 // Make a tree of errors from ajv errors array
 export function makeTree(ajvErrors: Array<Error> = []) {
-  const root = { children: {} };
+  const root: Node = { children: {}, errors: [] };
   ajvErrors.forEach(ajvError => {
     const { dataPath } = ajvError;
 
@@ -94,7 +95,10 @@ export function filterRedundantErrors(root: Node, parent?: Node, key?: string) {
   );
 }
 
-export function createErrorInstances(root: Node, options: Options) {
+export function createErrorInstances(
+  root: Node,
+  options: Options
+): Array<BaseValidationError> {
   const errors = getErrors(root);
   if (areEnumErrors(errors)) {
     const uniqueValues = new Set(
@@ -113,7 +117,7 @@ export function createErrorInstances(root: Node, options: Options) {
     ];
   } else {
     return concatAll(
-      errors.reduce((ret, error) => {
+      errors.reduce<Array<BaseValidationError>>((ret, error) => {
         switch (error.keyword) {
           case 'additionalProperties':
             return ret.concat(
@@ -129,7 +133,8 @@ export function createErrorInstances(root: Node, options: Options) {
   }
 }
 
-export default (ajvErrors, options) => {
+// FIXME: Remove any
+export default (ajvErrors: any, options: any) => {
   const tree = makeTree(ajvErrors || []);
   filterRedundantErrors(tree);
   return createErrorInstances(tree, options);

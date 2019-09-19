@@ -1,9 +1,11 @@
 import chalk from 'chalk';
-import BaseValidationError from './base';
-import { RequiredError } from '../types';
+import ValidationError from './base';
+import { RequiredError, Options } from '../types';
 
-export default class RequiredValidationError extends BaseValidationError {
-  error: RequiredError;
+export default class RequiredValidationError extends ValidationError {
+  constructor(public error: RequiredError, options: Options) {
+    super(error, options);
+  }
 
   getLocation(dataPath = this.error.dataPath) {
     const { start } = super.getLocation(dataPath);
@@ -26,7 +28,7 @@ export default class RequiredValidationError extends BaseValidationError {
 
     return {
       ...this.getLocation(),
-      error: `${this.getDecoratedPath(dataPath)} ${message}`,
+      error: `${dataPath} ${message}`,
       path: dataPath,
     };
   }

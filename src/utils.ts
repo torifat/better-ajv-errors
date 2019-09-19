@@ -18,13 +18,11 @@ export const areEnumErrors = (
 export const getErrors = (node: Node) => (node && node.errors) || [];
 
 // Node
-export const getChildren = (node: Node): ReadonlyArray<Node> =>
+export const getChildren = (node: Node): Array<Node> =>
   (node && Object.values<Node>(node.children)) || [];
 
-export const getSiblings = (parent: Node) => (
-  node: Node
-): ReadonlyArray<Node> => getChildren(parent).filter(not(eq(node)));
+export const getSiblings = (parent: Node) => (node: Node): Array<Node> =>
+  getChildren(parent).filter(not(eq(node)));
 
-export const concatAll = <T>(xs: ReadonlyArray<T>) => (
-  ys: ReadonlyArray<T | ReadonlyArray<T>>
-) => ys.reduce((zs: ReadonlyArray<T>, z) => zs.concat(z), xs);
+export const concatAll = <T>(xs: Array<T>) => (ys: Array<T | Array<T>>) =>
+  ys.reduce((zs: Array<T>, z) => zs.concat(z), xs);

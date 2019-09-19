@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import BaseValidationError from './base';
+import ValidationError from './base';
 
-export default class DefaultValidationError extends BaseValidationError {
+export default class DefaultValidationError extends ValidationError {
   print() {
     const { keyword, message } = this.error;
     const output = [chalk`{red {bold ${keyword.toUpperCase()}} ${message}}\n`];
@@ -16,7 +16,7 @@ export default class DefaultValidationError extends BaseValidationError {
 
     return {
       ...this.getLocation(),
-      error: `${this.getDecoratedPath(dataPath)}: ${keyword} ${message}`,
+      error: `${dataPath}: ${keyword} ${message}`,
       path: dataPath,
     };
   }

@@ -1,3 +1,4 @@
+import { ValueNode } from 'json-to-ast';
 import {
   ErrorObject,
   RequiredParams,
@@ -5,33 +6,36 @@ import {
   AdditionalPropertiesParams,
 } from 'ajv';
 
-export type Error = ErrorObject & {
+type CutomErrorObject = ErrorObject & {
   isIdentifierLocation?: boolean;
   shouldSkipEndLocation?: boolean;
+  // FIXME: Assuming there's no point of using this libray
+  // if your error messages are turned off ¯\_(ツ)_/¯
+  message: string;
 };
 
-type XError<T> = Error & {
-  params: T;
+type ErrorBuilder<T, U> = CutomErrorObject & {
+  keyword: T;
+  params: U;
 };
 
-export type RequiredError = XError<RequiredParams>;
+export type RequiredError = ErrorBuilder<'required', RequiredParams>;
+export type EnumError = ErrorBuilder<'enum', EnumParams>;
+export type AdditionalPropError = ErrorBuilder<
+  'additionalProperties',
+  AdditionalPropertiesParams
+>;
 
-export interface EnumError extends Error {
-  params: EnumParams;
-}
-
-export interface AdditionalPropError extends Error {
-  params: AdditionalPropertiesParams;
-}
+export type Error = RequiredError | EnumError | AdditionalPropError;
 
 export interface Node {
   children: { [key: string]: Node };
-  errors?: Array<Error>;
+  errors: Array<Error>;
 }
 
 export interface Options {
-  data: string;
+  data: object;
   schema: string;
-  jsonAst: object;
+  jsonAst: ValueNode;
   jsonRaw: string;
 }

@@ -1,13 +1,14 @@
+import { ValueNode, IdentifierNode } from 'json-to-ast';
 import { getPointers } from './utils';
 
 export default function getMetaFromPath(
-  jsonAst,
-  dataPath,
-  isIdentifierLocation
+  jsonAst: ValueNode,
+  dataPath: string,
+  isIdentifierLocation: boolean = false
 ) {
   const pointers = getPointers(dataPath);
   const lastPointerIndex = pointers.length - 1;
-  return pointers.reduce((obj, pointer, idx) => {
+  return pointers.reduce<ValueNode | IdentifierNode>((obj, pointer, idx) => {
     switch (obj.type) {
       case 'Object': {
         const filtered = obj.children.filter(
@@ -20,10 +21,11 @@ export default function getMetaFromPath(
         return isIdentifierLocation && idx === lastPointerIndex ? key : value;
       }
       case 'Array':
-        return obj.children[pointer];
+        return obj.children[+pointer];
       default:
         // eslint-disable-next-line no-console
         console.log(obj);
+        return obj;
     }
   }, jsonAst);
 }

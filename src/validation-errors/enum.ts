@@ -1,13 +1,11 @@
 import chalk from 'chalk';
 import leven from 'leven';
 import pointer from 'jsonpointer';
-import BaseValidationError, { ErrorOutput } from './base';
-import { EnumError } from '../types';
+import ValidationError, { ErrorOutput } from './base';
+import { EnumError, Options } from '../types';
 
-export default class EnumValidationError extends BaseValidationError {
-  error: EnumError;
-
-  constructor(error: EnumError, options) {
+export default class EnumValidationError extends ValidationError {
+  constructor(public error: EnumError, options: Options) {
     super(error, options);
   }
 
@@ -38,9 +36,7 @@ export default class EnumValidationError extends BaseValidationError {
 
     const output: ErrorOutput = {
       ...this.getLocation(),
-      error: `${this.getDecoratedPath(
-        dataPath
-      )} ${message}: ${params.allowedValues.join(', ')}`,
+      error: `${dataPath} ${message}: ${params.allowedValues.join(', ')}`,
       path: dataPath,
     };
 
