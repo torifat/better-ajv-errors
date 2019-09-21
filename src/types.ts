@@ -11,7 +11,7 @@ type CutomErrorObject = ErrorObject & {
   shouldSkipEndLocation?: boolean;
   // FIXME: Assuming there's no point of using this libray
   // if your error messages are turned off ¯\_(ツ)_/¯
-  message: string;
+  // message: string;
 };
 
 type ErrorBuilder<T, U> = CutomErrorObject & {
@@ -35,7 +35,7 @@ export interface Node {
 
 export interface Options {
   data: object;
-  schema: string;
+  schema: object;
   jsonAst: ValueNode;
   jsonRaw: string;
 }

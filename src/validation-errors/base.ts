@@ -48,7 +48,7 @@ export default class ValidationError {
     });
   }
 
-  print() {
+  print(): Array<string> {
     throw new Error(
       `Implement the 'print' method inside ${this.constructor.name}!`
     );

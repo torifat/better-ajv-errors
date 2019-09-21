@@ -5,6 +5,7 @@ describe('makeTree', () => {
     expect(makeTree([])).toMatchInlineSnapshot(`
       Object {
         "children": Object {},
+        "errors": Array [],
       }
     `);
   });
@@ -22,6 +23,7 @@ describe('makeTree', () => {
             ],
           },
         },
+        "errors": Array [],
       }
     `);
   });
@@ -44,6 +46,7 @@ describe('makeTree', () => {
             "errors": Array [],
           },
         },
+        "errors": Array [],
       }
     `);
   });
@@ -76,6 +79,7 @@ describe('makeTree', () => {
             "errors": Array [],
           },
         },
+        "errors": Array [],
       }
     `);
   });
@@ -121,6 +125,7 @@ describe('makeTree', () => {
             "errors": Array [],
           },
         },
+        "errors": Array [],
       }
     `);
   });

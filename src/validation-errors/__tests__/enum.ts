@@ -1,9 +1,9 @@
-import parse from 'json-to-ast';
+import parse, { ValueNode } from 'json-to-ast';
 import EnumValidationError from '../enum';
 import { getSchemaAndData } from './helpers';
 
 describe('Enum', () => {
-  let schema, data, jsonRaw, jsonAst;
+  let schema: object, data: object, jsonRaw: string, jsonAst: ValueNode;
   beforeAll(async () => {
     [schema, data] = await getSchemaAndData('enum', __dirname);
     jsonRaw = JSON.stringify(data, null, 2);
@@ -52,6 +52,6 @@ describe('Enum', () => {
       { data, schema, jsonRaw, jsonAst }
     );
 
-    expect(error.print(schema, { id: '' })).toMatchSnapshot();
+    expect(error.print()).toMatchSnapshot();
   });
 });

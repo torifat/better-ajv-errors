@@ -15,8 +15,9 @@ import {
   RequiredValidationError,
   DefaultValidationError,
   EnumValidationError,
-  BaseValidationError,
+  ValidationError,
 } from './validation-errors';
+import { ErrorObject } from 'ajv';
 
 const JSON_POINTERS_REGEX = /\/[\w_-]+(\/\d+)?/g;
 
@@ -98,7 +99,7 @@ export function filterRedundantErrors(root: Node, parent?: Node, key?: string) {
 export function createErrorInstances(
   root: Node,
   options: Options
-): Array<BaseValidationError> {
+): Array<ValidationError> {
   const errors = getErrors(root);
   if (areEnumErrors(errors)) {
     const uniqueValues = new Set(
@@ -117,7 +118,7 @@ export function createErrorInstances(
     ];
   } else {
     return concatAll(
-      errors.reduce<Array<BaseValidationError>>((ret, error) => {
+      errors.reduce<Array<ValidationError>>((ret, error) => {
         switch (error.keyword) {
           case 'additionalProperties':
             return ret.concat(
@@ -134,7 +135,7 @@ export function createErrorInstances(
 }
 
 // FIXME: Remove any
-export default (ajvErrors: any, options: any) => {
+export default (ajvErrors: Array<ErrorObject>, options: any) => {
   const tree = makeTree(ajvErrors || []);
   filterRedundantErrors(tree);
   return createErrorInstances(tree, options);
