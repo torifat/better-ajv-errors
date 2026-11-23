@@ -3,4 +3,4 @@ idiomatic_version_file_enable_tools = ["node", "pnpm"]
 
 [tools]
 actionlint = "1.7.12"
-zizmor = "1.32.0"
+zizmor = "1.33.1"
